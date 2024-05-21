@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Remind Me',
+        title: 'CoC Calculator',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
@@ -50,24 +50,24 @@ class _MyHomePageState extends State<MyHomePage> {
     deffBuildings.sort((a,b) =>  a.hitPoints.last.compareTo(b.hitPoints.last));
   }
 
-  void launchCoffee() async => await canLaunch("https://buymeacoffee.com/bezes") ? await launch("https://buymeacoffee.com/bezes") : throw 'Could not launch';
+  void launchCoffee() async => await canLaunchUrl( Uri.parse("https://buymeacoffee.com/bezes")) ? await launchUrl( Uri.parse("https://buymeacoffee.com/bezes" )) : throw 'Could not launch';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          ElevatedButton(onPressed: launchCoffee, child: const Row(
+          ElevatedButton(onPressed: launchCoffee,style: ElevatedButton.styleFrom(backgroundColor: CupertinoColors.activeBlue, minimumSize: Size(100, 300)), child: Row(
           children: [
-            Icon(Icons.coffee),
-            Text("Buy me a Coffee"),
+            const Icon(Icons.coffee, color: Colors.orange,),
+            Text("Buy me a Coffee", style: DefaultTextStyle.of(context).style.copyWith(color: Colors.orange, decoration: TextDecoration.none, fontSize: 30)),
           ],
-        ),style: ElevatedButton.styleFrom(backgroundColor: Colors.green, minimumSize: Size(100, 300)))],
+        ))],
         title: Center(
           child: RichText(
             text: TextSpan(
               text: 'CoC ',
-              style: DefaultTextStyle.of(context).style.copyWith(color: Colors.orange),
+              style: DefaultTextStyle.of(context).style.copyWith(color: Colors.orange, decoration: TextDecoration.none),
               children: const <TextSpan>[
                 TextSpan(text: 'Calculator', style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.activeBlue)),
               ],

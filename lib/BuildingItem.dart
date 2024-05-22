@@ -39,50 +39,97 @@ class _CalcPositionState extends State<BuildingItem> {
 
     var earthQuakeDmg = (lifePoints * earthquake.hitPoints[(appState.selectedLevels[earthquake] ?? 1) - 1]).toInt();
     var secondQuake = earthQuakeDmg ~/ 3;
+    var thirdQuake = earthQuakeDmg ~/ 5;
 
     var zapDmg =  lightning.hitPoints[(appState.selectedLevels[lightning] ?? 1) - 1].toInt();
-
-    List<(Entry, int)> justLightning = [];
     List<List<(Entry, int)>> result = [];
-    getZapCount(justLightning, lifePoints, zapDmg);
-    result.add(justLightning);
-    List<(Entry, int)> oneEarth = [];
-    List<(Entry, int)> twoEarth = [];
-    if (!hero) {
-      oneEarth.add((earthquake, 1));
 
-      getZapCount(oneEarth,lifePoints-earthQuakeDmg, zapDmg) ;
+    // Without Hero Equipment
+    if(appState.enabledSpells[lightning]??true) {
+      List<(Entry, int)> justLightning = [];
+      getZapCount(justLightning, lifePoints, zapDmg);
+      result.add(justLightning);
 
-      twoEarth.add((earthquake, 2));
-      getZapCount(twoEarth,lifePoints-earthQuakeDmg-secondQuake, zapDmg) ;
-      result.add(oneEarth);
 
-      if((lifePoints-earthQuakeDmg-secondQuake) ~/ zapDmg != (lifePoints-earthQuakeDmg) ~/ zapDmg){
-        result.add(twoEarth);
+      List<(Entry, int)> oneEarth = [];
+      List<(Entry, int)> twoEarth = [];
+      if (!hero && (appState.enabledSpells[earthquake]??true)) {
+        oneEarth.add((earthquake, 1));
+
+        getZapCount(oneEarth, lifePoints - earthQuakeDmg, zapDmg);
+
+        twoEarth.add((earthquake, 2));
+        getZapCount(twoEarth, lifePoints - earthQuakeDmg - secondQuake, zapDmg);
+        result.add(oneEarth);
+
+        if ((lifePoints - earthQuakeDmg - secondQuake) ~/ zapDmg !=
+            (lifePoints - earthQuakeDmg) ~/ zapDmg) {
+          result.add(twoEarth);
+        }
       }
-
     }
+
+    // Hero Equipment
     for( Entry spell in heroSpells){
-      var fireballDmg =  spell.hitPoints[(appState.selectedLevels[spell] ?? 1) - 1].toInt();
-      List<(Entry, int)> oneFireball = [];
-      oneFireball.add((spell,1));
-      getZapCount(oneFireball, lifePoints-fireballDmg, zapDmg);
-      result.add(oneFireball);
-      if(fireballDmg < lifePoints){
+      if(!(appState.enabledSpells[spell]??true)){
+        continue;
+      }
+      var heroDmg =  spell.hitPoints[(appState.selectedLevels[spell] ?? 1) - 1].toInt();
+      if(appState.enabledSpells[lightning]??true) {
+        List<(Entry, int)> heroWithZaps = [];
+        heroWithZaps.add((spell, 1));
+        getZapCount(heroWithZaps, lifePoints - heroDmg, zapDmg);
+        result.add(heroWithZaps);
+      }else{
+        if(heroDmg >= lifePoints){
+          List<(Entry, int)> heroWithZaps = [];
+          heroWithZaps.add((spell, 1));
+          result.add(heroWithZaps);
+        }
+      }
+      if(heroDmg < lifePoints && (appState.enabledSpells[earthquake]??true)){
         List<(Entry, int)> earthFireball = [];
         earthFireball.add((spell, 1));
         earthFireball.add((earthquake,1));
-        getZapCount(earthFireball, lifePoints-fireballDmg-earthQuakeDmg, zapDmg);
-        result.add(earthFireball);
-
+        if(appState.enabledSpells[lightning]??true) {
+          getZapCount(earthFireball, lifePoints - heroDmg - earthQuakeDmg, zapDmg);
+          result.add(earthFireball);
+        }
+        if(heroDmg + earthQuakeDmg >= lifePoints && (appState.enabledSpells[earthquake]??true)){
+          result.add(earthFireball);
+        }
       }
-      if(fireballDmg + earthQuakeDmg < lifePoints){
+      if(heroDmg + earthQuakeDmg < lifePoints && (appState.enabledSpells[earthquake]??true)){
         List<(Entry, int)> earthFireball2 = [];
         earthFireball2.add((spell, 1));
         earthFireball2.add((earthquake,2));
-        getZapCount(earthFireball2, lifePoints-fireballDmg-earthQuakeDmg-secondQuake, zapDmg);
-        if((lifePoints-fireballDmg-earthQuakeDmg-secondQuake) ~/ zapDmg != (lifePoints-fireballDmg-earthQuakeDmg) ~/ zapDmg){
+        if(appState.enabledSpells[lightning]??true) {
+          getZapCount(earthFireball2,
+              lifePoints - heroDmg - earthQuakeDmg - secondQuake, zapDmg);
+          if ((lifePoints - heroDmg - earthQuakeDmg - secondQuake) ~/ zapDmg !=
+              (lifePoints - heroDmg - earthQuakeDmg) ~/ zapDmg) {
+            result.add(earthFireball2);
+          }
+        }
+        if(heroDmg + earthQuakeDmg + secondQuake >= lifePoints && (appState.enabledSpells[earthquake]??true)){
           result.add(earthFireball2);
+        }
+      }
+      if(heroDmg + earthQuakeDmg + secondQuake < lifePoints && (appState.enabledSpells[earthquake]??true)){
+        List<(Entry, int)> earthFireball3 = [];
+        earthFireball3.add((spell, 1));
+        earthFireball3.add((earthquake,3));
+        if(appState.enabledSpells[lightning]??true) {
+          getZapCount(earthFireball3,
+              lifePoints - heroDmg - earthQuakeDmg - secondQuake - thirdQuake,
+              zapDmg);
+          if ((lifePoints - heroDmg - earthQuakeDmg - secondQuake) ~/ zapDmg !=
+              (lifePoints - heroDmg - earthQuakeDmg) ~/ zapDmg) {
+            result.add(earthFireball3);
+          }
+        }
+        if(heroDmg + earthQuakeDmg + secondQuake + thirdQuake >= lifePoints && (appState.enabledSpells[earthquake]??true)){
+          result.add(earthFireball3);
         }
       }
     }
@@ -150,38 +197,46 @@ class _CalcPositionState extends State<BuildingItem> {
                 },
               ),
 
-              Visibility(
-                visible: showAll,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: neededSpells
-                      .map((var e) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                        children: e.map((p) {
-                      return SpellContainer(
-                          item: p.$1,
-                          level: appState.selectedLevels[p.$1] ?? 1,
-                          times: p.$2);
-                    }).toList());
-                  }).toList(),
+              if(neededSpells.isNotEmpty)
+                Visibility(
+                  visible: showAll,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: neededSpells
+                        .map((var e) {
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: e.map((p) {
+                            return SpellContainer(
+                                item: p.$1,
+                                level: appState.selectedLevels[p.$1] ?? 1,
+                                times: p.$2);
+                          }).toList());
+                    }).toList(),
+                  ),
                 ),
-              ),
-              Visibility(
-                visible: !showAll,
-                child: SpellContainer(
-                              item: lightning,
-                              level: appState.selectedLevels[lightning] ?? 1,
-                              times: neededSpells[0][0].$2),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(onPressed: () =>
-                setState(() {
-                  showAll = !showAll;
-                }), child: Text(showAll ? "Hide All":"Show All")),
-              )
+              if(neededSpells.isNotEmpty)
+                Visibility(
+                    visible: !showAll,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: neededSpells[0].map((p) {
+                          return SpellContainer(
+                              item: p.$1,
+                              level: appState.selectedLevels[p.$1] ?? 1,
+                              times: p.$2);
+                        }).toList())
+                ),
+              if(neededSpells.length>1)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(onPressed: () =>
+                      setState(() {
+                        showAll = !showAll;
+                      }), child: Text(showAll ? "Hide All" : "Show All")),
+                )
+
             ],
           ),
         ),

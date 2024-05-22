@@ -11,6 +11,15 @@ class MyAppState extends ChangeNotifier {
     giantArrow: giantArrow.hitPoints.length
   };
 
+  Map<Entry, bool> enabledSpells = {
+    lightning: true,
+    earthquake: true,
+    spikeball: true,
+    fireball: true,
+    seekingShield: true,
+    giantArrow: true
+  };
+
   void notify(){
     notifyListeners();
   }

@@ -9,10 +9,13 @@ class Entry {
 
 var attackSpells = [lightning, earthquake, fireball, giantArrow, spikeball, seekingShield];
 var heroSpells = [fireball, giantArrow, spikeball, seekingShield];
-var deffBuildings = [mortar, cannon, archerTower, airSweeper, airDefense, builderhut, wizardTower, bombTower, queen, warden, royal, xBow, inferno, eagle, tesla, monolotih, scatter, multiArcherTower, ricochetCannon, spellTower];
+var deffBuildings = [mortar, cannon, archerTower, airSweeper, airDefense, builderhut, wizardTower, bombTower, queen, warden, royal, xBow, inferno, eagle, tesla, monolotih, scatter, multiArcherTower, ricochetCannon, spellTower,clanCastle];
 var lightning = Entry("Lighting", [150, 180, 210, 240, 270, 320, 400, 480, 560, 600, 640],"Lightning_Spell_info.png") ;
 
 var earthquake = Entry("Earthquake", [0.145, 0.17, 0.21, 0.25, 0.29], "Earthquake_Spell_info.png");
+
+var clanCastle = Entry("Clan Castle", [1000,1400,2000,2600,3000,3400,4000,4400,4800,5200,5400,5600], "Clan_Castle12.png");
+
 var queen = Entry("Archer Queen", [580, 592, 604,
   617,
   630,

@@ -35,17 +35,17 @@ class _CalcPositionState extends State<BuildingItem> {
     }
   }
   List<List<(Entry, int)>> calcNeededSpells(
-      int lifePoints, bool hero, MyAppState appState) {
+      int lifePoints, bool hero, bool isResource, MyAppState appState) {
 
     var earthQuakeDmg = (lifePoints * earthquake.hitPoints[(appState.selectedLevels[earthquake] ?? 1) - 1]).toInt();
     var secondQuake = earthQuakeDmg ~/ 3;
     var thirdQuake = earthQuakeDmg ~/ 5;
-
+    var zapAllowed = !isResource && (appState.enabledSpells[lightning]??true);
     var zapDmg =  lightning.hitPoints[(appState.selectedLevels[lightning] ?? 1) - 1].toInt();
     List<List<(Entry, int)>> result = [];
 
     // Without Hero Equipment
-    if(appState.enabledSpells[lightning]??true) {
+    if(zapAllowed) {
       List<(Entry, int)> justLightning = [];
       getZapCount(justLightning, lifePoints, zapDmg);
       result.add(justLightning);
@@ -74,8 +74,15 @@ class _CalcPositionState extends State<BuildingItem> {
       if(!(appState.enabledSpells[spell]??true)){
         continue;
       }
+      if((spikeball == spell || seekingShield == spell) && hero){
+        continue;
+      }
+      if(seekingShield == spell && isResource){
+        continue;
+      }
+
       var heroDmg =  spell.hitPoints[(appState.selectedLevels[spell] ?? 1) - 1].toInt();
-      if(appState.enabledSpells[lightning]??true) {
+      if(zapAllowed) {
         List<(Entry, int)> heroWithZaps = [];
         heroWithZaps.add((spell, 1));
         getZapCount(heroWithZaps, lifePoints - heroDmg, zapDmg);
@@ -91,7 +98,7 @@ class _CalcPositionState extends State<BuildingItem> {
         List<(Entry, int)> earthFireball = [];
         earthFireball.add((spell, 1));
         earthFireball.add((earthquake,1));
-        if(appState.enabledSpells[lightning]??true) {
+        if(zapAllowed) {
           getZapCount(earthFireball, lifePoints - heroDmg - earthQuakeDmg, zapDmg);
           result.add(earthFireball);
         }
@@ -103,7 +110,7 @@ class _CalcPositionState extends State<BuildingItem> {
         List<(Entry, int)> earthFireball2 = [];
         earthFireball2.add((spell, 1));
         earthFireball2.add((earthquake,2));
-        if(appState.enabledSpells[lightning]??true) {
+        if(zapAllowed) {
           getZapCount(earthFireball2,
               lifePoints - heroDmg - earthQuakeDmg - secondQuake, zapDmg);
           if ((lifePoints - heroDmg - earthQuakeDmg - secondQuake) ~/ zapDmg !=
@@ -119,7 +126,7 @@ class _CalcPositionState extends State<BuildingItem> {
         List<(Entry, int)> earthFireball3 = [];
         earthFireball3.add((spell, 1));
         earthFireball3.add((earthquake,3));
-        if(appState.enabledSpells[lightning]??true) {
+        if(zapAllowed) {
           getZapCount(earthFireball3,
               lifePoints - heroDmg - earthQuakeDmg - secondQuake - thirdQuake,
               zapDmg);
@@ -145,6 +152,7 @@ class _CalcPositionState extends State<BuildingItem> {
     var neededSpells = calcNeededSpells(
                           widget.spell.hitPoints[sliderValue - 1].toInt(),
                           widget.spell.isHero,
+                          widget.spell == clanCastle,
                           appState);
     return Padding(
       padding: const EdgeInsets.all(8.0),

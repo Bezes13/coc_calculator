@@ -57,17 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          ElevatedButton(onPressed: launchCoffee,style: ElevatedButton.styleFrom(backgroundColor: CupertinoColors.activeBlue, minimumSize: Size(100, 300)), child: Row(
-          children: [
-            const Icon(Icons.coffee, color: Colors.orange,),
-            Text("Buy me a Coffee", style: DefaultTextStyle.of(context).style.copyWith(color: Colors.orange, decoration: TextDecoration.none, fontSize: 30)),
-          ],
-        ))],
+          IconButton(icon:Icon(Icons.coffee, color: Colors.orange,), onPressed: launchCoffee),],
         title: Center(
           child: RichText(
             text: TextSpan(
               text: 'CoC ',
-              style: DefaultTextStyle.of(context).style.copyWith(color: Colors.orange, decoration: TextDecoration.none),
+              style: DefaultTextStyle.of(context).style.copyWith(color: Colors.orange, decoration: TextDecoration.none, fontSize: 30),
               children: const <TextSpan>[
                 TextSpan(text: 'Calculator', style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.activeBlue)),
               ],
@@ -75,8 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         centerTitle: true,
-
-
       ),
       body: SingleChildScrollView(
         child: Column(

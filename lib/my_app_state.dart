@@ -1,4 +1,4 @@
-import 'package:coc_calculator/data.dart';
+import 'package:coc_calculator/data_offline/data.dart';
 import 'package:flutter/material.dart';
 
 class MyAppState extends ChangeNotifier {

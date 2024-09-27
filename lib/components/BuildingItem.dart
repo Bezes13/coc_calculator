@@ -1,11 +1,11 @@
-import 'package:coc_calculator/SpellContainer.dart';
-import 'package:coc_calculator/data.dart';
+import 'package:coc_calculator/components/SpellContainer.dart';
+import 'package:coc_calculator/data_offline/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import 'my_app_state.dart';
+import '../my_app_state.dart';
 
 class BuildingItem extends StatefulWidget {
   const BuildingItem({super.key, required this.spell});

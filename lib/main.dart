@@ -1,12 +1,12 @@
-import 'package:coc_calculator/BuildingItem.dart';
-import 'package:coc_calculator/CalcPosition.dart';
-import 'package:coc_calculator/data.dart';
+import 'package:coc_calculator/components/BuildingItem.dart';
+
+import 'package:coc_calculator/data_offline/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'components/CalcPosition.dart';
 import 'my_app_state.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart' show ChangeNotifierProvider;
+import 'package:url_launcher/url_launcher.dart' show canLaunchUrl, launchUrl;
 
 void main() {
   runApp(const MyApp());
@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(icon:Icon(Icons.coffee, color: Colors.orange,), onPressed: launchCoffee),],
+          IconButton(icon:const Icon(Icons.coffee, color: Colors.orange,), onPressed: launchCoffee),],
         title: Center(
           child: RichText(
             text: TextSpan(
@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Divider(),
+            const Divider(),
             Center(
               child: Wrap(
                 children: attackSpells
@@ -94,7 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

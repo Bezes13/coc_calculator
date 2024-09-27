@@ -1,10 +1,10 @@
-import 'package:coc_calculator/SpellContainer.dart';
-import 'package:coc_calculator/data.dart';
+import 'package:coc_calculator/data_offline/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'my_app_state.dart';
+import '../my_app_state.dart';
+import 'SpellContainer.dart';
 
 class CalcPosition extends StatefulWidget {
   const CalcPosition({super.key, required this.spell});

@@ -1,5 +1,5 @@
-import 'package:coc_calculator/LevelContainer.dart';
-import 'package:coc_calculator/data.dart';
+import 'package:coc_calculator/components/LevelContainer.dart';
+import 'package:coc_calculator/data_offline/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
